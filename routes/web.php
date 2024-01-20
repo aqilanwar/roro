@@ -16,3 +16,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+// Route::get('/employee/login', function () {
+//     return redirect(route('filament.employee.auth.login'));
+// })->name('login');

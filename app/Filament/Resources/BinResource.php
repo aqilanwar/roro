@@ -41,7 +41,7 @@ class BinResource extends Resource
                         ->required()
                         ->maxLength(5),
                     Forms\Components\TextInput::make('price')
-                        ->type('number')
+                        ->currencyMask(thousandSeparator: ',',decimalSeparator: '.',precision: 2)                    
                         ->required()
                         ->maxLength(9),
                     RichEditor::make('description')
@@ -72,6 +72,11 @@ class BinResource extends Resource
                 TextColumn::make('bin_name')
                     ->sortable()
                     ->searchable(),
+                TextColumn::make('description')
+                    ->sortable()
+                    ->sortable()
+                    ->searchable()
+                    ->html(),
                 TextColumn::make('quantity')
                     ->sortable(),
                 TextColumn::make('price')    
