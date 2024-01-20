@@ -21,6 +21,8 @@ class UserResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-user-circle';
 
+    protected static ?string $navigationGroup = 'Manage';
+
     public static function form(Form $form): Form
     {
         return $form
@@ -33,11 +35,12 @@ class UserResource extends Resource
                         ->maxLength(40),
                     Forms\Components\TextInput::make('email')
                         ->email()
-                        ->unique(table: User::class)
+                        ->unique(table: User::class, ignoreRecord: true)
                         ->required(),
 
 
                     Forms\Components\Select::make('role')
+                        ->required()
                         ->options([
                             'ADMIN' => 'Admin',
                             'CUSTOMER' => 'Customer',
@@ -64,8 +67,14 @@ class UserResource extends Resource
                 ->sortable()
                 ->searchable(),
                 TextColumn::make('role')
-                ->sortable()
-                ->searchable(),
+                   ->badge()
+                    ->color(fn (string $state): string => match ($state) {
+                        'ADMIN' => 'success',
+                        'EMPLOYEE' => 'primary',
+                        'CUSTOMER' => 'warning',
+                        // 'rejected' => 'danger',
+                    })
+                    ->searchable(),                
             ])
             ->filters([
                 //

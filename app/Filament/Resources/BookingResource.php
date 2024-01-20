@@ -16,6 +16,8 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 class BookingResource extends Resource
 {
     protected static ?string $model = Booking::class;
+    protected static ?string $navigationLabel = 'Customer Booking';
+    protected static ?string $modelLabel = 'Customer Booking';
 
     protected static ?string $navigationIcon = 'heroicon-o-bookmark';
 
@@ -31,13 +33,25 @@ class BookingResource extends Resource
                 Forms\Components\TextInput::make('delivery_address')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\TextInput::make('payment_status')
+ 
+                Forms\Components\Select::make('payment_status')
                     ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('status')
+                    ->options([
+                        'Paid' => 'Paid',
+                        'Pending' => 'Pending',
+                        'Cancelled' => 'Cancelled',
+                        'Rejected' => 'Rejected',
+                    ]),
+
+                Forms\Components\Select::make('status')
                     ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('customer_id')
+                    ->options([
+                        'In Progress' => 'In Progress',
+                        'Returned' => 'Returned',
+                        'Cancelled' => 'Cancelled',
+
+                    ]),
+                Forms\Components\TextInput::make('user_id')
                     ->required()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('bin_id')
@@ -50,21 +64,44 @@ class BookingResource extends Resource
     {
         return $table
             ->columns([
+                Tables\Columns\TextColumn::make('delivery_address')
+                    ->description(fn (Booking $record): string => 'Customer Name: '. $record->user->name)
+                    ->searchable(),
+                
+                Tables\Columns\TextColumn::make('bin.bin_name')
+                    ->description(fn (Booking $record): string => 'Quantity : '. $record->quantity)
+                    ->searchable(),
+
                 Tables\Columns\TextColumn::make('booking_date')
                     ->date()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('quantity')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('delivery_address')
-                    ->searchable(),
+                // Tables\Columns\TextColumn::make('quantity')
+                //     ->description(fn (Booking $record): string => 'Quantity '. $record->user->name)
+
+                //     ->searchable(),
+
                 Tables\Columns\TextColumn::make('payment_status')
+
+                ->badge()
+                    ->color(fn (string $state): string => match ($state) {
+                        'Paid' => 'success',
+                        'Cancelled' => 'danger',
+                        'Pending' => 'warning',
+                        'Rejected' => 'danger',
+                    })
                     ->searchable(),
                 Tables\Columns\TextColumn::make('status')
+                   ->badge()
+                    ->color(fn (string $state): string => match ($state) {
+                        'In Progress' => 'gray',
+                        'Returned' => 'success',
+                        'Cancelled' => 'danger',
+                        // 'rejected' => 'danger',
+                    })
                     ->searchable(),
-                Tables\Columns\TextColumn::make('customer_id')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('bin_id')
-                    ->searchable(),
+                // Tables\Columns\TextColumn::make('user.name')
+                //     ->searchable(),
+ 
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()

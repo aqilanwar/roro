@@ -1,6 +1,9 @@
 <?php
 
+use App\Http\Middleware\Authenticate;
 use Illuminate\Support\Facades\Route;
+use App\Http\Middleware\IsCustomer;
+use App\Models\Bin;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,6 +20,15 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-// Route::get('/employee/login', function () {
-//     return redirect(route('filament.employee.auth.login'));
-// })->name('login');
+Route::get('/cart', function (){
+    return 'hehe';
+})->middleware([IsCustomer::class, Authenticate::class])->name('cart');
+
+Route::get('/login', function () {
+    return redirect(route('filament.customer.auth.login'));
+})->name('login');
+
+Route::get('/product', function () {
+    $data = Bin::find(1);
+    return view ('product' , compact('data'));
+})->name('product');

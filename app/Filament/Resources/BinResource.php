@@ -64,6 +64,7 @@ class BinResource extends Resource
 
             ]);
     }
+    protected static ?string $navigationGroup = 'Manage';
 
     public static function table(Table $table): Table
     {

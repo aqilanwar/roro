@@ -21,4 +21,6 @@ class IsAdmin
 
         abort(403, 'You are not allowed to access this page.');
     }
+
+    
 }

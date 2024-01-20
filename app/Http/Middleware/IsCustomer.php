@@ -19,6 +19,11 @@ class IsCustomer
             return $next($request);
         }
 
-        abort(403, 'You are not allowed to access this page.');
+        return redirect()->route('login');
+    }
+
+    protected function redirectTo($request)
+    {
+        return '/login';
     }
 }

@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('bin_name');
             $table->integer('quantity');
             $table->string('price');
-            $table->string('description');
+            $table->text('description');
             $table->string('image');
             $table->softDeletes();
             $table->timestamps();

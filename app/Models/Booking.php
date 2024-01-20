@@ -15,7 +15,14 @@ class Booking extends Model
         'delivery_address',
         'payment_status',
         'status',
-        'customer_id',
+        'user_id',
         'bin_id',
     ];
+
+    public function user(){
+        return $this->belongsTo(User::class);
+    }
+    public function bin(){
+        return $this->belongsTo(Bin::class);
+    }
 }

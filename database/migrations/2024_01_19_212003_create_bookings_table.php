@@ -17,9 +17,12 @@ return new class extends Migration
             $table->string('quantity');
             $table->string('delivery_address');
             $table->string('payment_status');
+            $table->string('phone_number');
             $table->string('status');
-            $table->string('customer_id');
-            $table->string('bin_id');
+            $table->unsignedBigInteger('user_id');         
+            $table->unsignedBigInteger('bin_id');         
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');           
+            $table->foreign('bin_id')->references('id')->on('bins')->onDelete('cascade');       
             $table->timestamps();
         });
     }
