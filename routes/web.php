@@ -2,6 +2,7 @@
 
 use App\Http\Middleware\Authenticate;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
 use App\Http\Middleware\IsCustomer;
 use App\Models\Bin;
 
@@ -17,8 +18,9 @@ use App\Models\Bin;
 */
 
 Route::get('/', function () {
-    return view('welcome');
-});
+    $data = Bin::all();
+    return view('pages.home',  compact('data'));
+})->name('home');
 
 Route::get('/cart', function (){
     return 'hehe';
@@ -28,7 +30,8 @@ Route::get('/login', function () {
     return redirect(route('filament.customer.auth.login'));
 })->name('login');
 
-Route::get('/product', function () {
-    $data = Bin::find(1);
-    return view ('product' , compact('data'));
+Route::get('/product', function (Request $request) {
+    $id = $request->id;
+    $data = Bin::find($id);
+    return view ('pages.product' , compact('data'));
 })->name('product');
