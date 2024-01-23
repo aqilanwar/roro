@@ -11,7 +11,7 @@
         <link href="https://fonts.bunny.net/css?family=poppins:400,700" rel="stylesheet" />
         @vite('resources/css/app.css')
         @vite('resources/js/app.js')
-
+        @livewireStyles
     </head>
     <body class="font-poppins">
     
@@ -20,8 +20,12 @@
 
         @yield('main')
 
+        <script src="https://cdn.jsdelivr.net/npm/alpinejs@2.8.2/dist/alpine.js" defer></script>
 
+
+        @livewireScripts
+        @yield('js')
 
     </body>
-   
+
 </html>

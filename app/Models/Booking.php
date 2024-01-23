@@ -14,6 +14,8 @@ class Booking extends Model
         'quantity',
         'delivery_address',
         'payment_status',
+        'phone_number',
+
         'status',
         'user_id',
         'bin_id',

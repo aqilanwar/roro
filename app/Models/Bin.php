@@ -14,6 +14,7 @@ class Bin extends Model
         'quantity',
         'price',
         'description',
+        'phone_number',
         'image'
     ];
 

@@ -33,7 +33,9 @@ class BookingResource extends Resource
                 Forms\Components\TextInput::make('delivery_address')
                     ->required()
                     ->maxLength(255),
- 
+                Forms\Components\TextInput::make('phone_number')
+                    ->required()
+                    ->maxLength(255),
                 Forms\Components\Select::make('payment_status')
                     ->required()
                     ->options([

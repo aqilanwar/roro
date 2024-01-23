@@ -75,18 +75,41 @@
     
             <div class="border-t mt-12 divide-y divide-gray-200"></div>
             
-            <button type="button" class="py-3 w-full text-center mt-4 px-4 inline-flex items-center justify-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
-                Rent now
-                <svg class="flex-shrink-0 w-4 h-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="m5 11 4-7"/>
-                    <path d="m19 11-4-7"/>
-                    <path d="M2 11h20"/>
-                    <path d="m3.5 11 1.6 7.4a2 2 0 0 0 2 1.6h9.8c.9 0 1.8-.7 2-1.6l1.7-7.4"/>
-                    <path d="m9 11 1 9"/>
-                    <path d="M4.5 15.5h15"/>
-                    <path d="m15 11-1 9"/>
-                </svg>
-            </button>
+            <div x-data="{ productId: {{ $data->id }}}">
+
+                <button @click="addToCart(productId)" type="button" class="py-3 w-full text-center mt-4 px-4 inline-flex items-center justify-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
+                    Rent now
+                    <svg class="flex-shrink-0 w-4 h-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="m5 11 4-7"/>
+                        <path d="m19 11-4-7"/>
+                        <path d="M2 11h20"/>
+                        <path d="m3.5 11 1.6 7.4a2 2 0 0 0 2 1.6h9.8c.9 0 1.8-.7 2-1.6l1.7-7.4"/>
+                        <path d="m9 11 1 9"/>
+                        <path d="M4.5 15.5h15"/>
+                        <path d="m15 11-1 9"/>
+                    </svg>
+                </button>
+                <!-- Toast -->
+                <div id="dismiss-toast-error" class="hidden absolute mt-5 w-full hs-removing:translate-x-5 hs-removing:opacity-0 transition duration-300 max-w-xs bg-red-100 border border-danger-200 rounded-xl shadow-lg" role="alert">
+                    <div class="flex p-4">
+                        <p class="text-sm text-gray-700 dark:text-gray-400">
+                            You have exceed the quantity
+                        </p>
+                    </div>
+                </div>
+                <!-- End Toast -->
+                <!-- Toast -->
+                <div id="dismiss-toast-success" class="hidden absolute mt-5 w-full hs-removing:translate-x-5 hs-removing:opacity-0 transition duration-300 max-w-xs bg-green-100 border border-green-200 rounded-xl shadow-lg dark:bg-gray-800 dark:border-gray-700" role="alert">
+                    <div class="flex p-4">
+                        <p class="text-sm text-gray-700 dark:text-gray-400">
+                            Item successfully added to cart.
+                        </p>
+                
+
+                    </div>
+                </div>
+                <!-- End Toast -->
+            </div>
                           
 
             </div>
@@ -95,4 +118,29 @@
         </div>
     </div>
 </div>
+
+@endsection
+
+@section('js')
+
+<script>
+    function addToCart(productId) {
+        axios.post('/add-to-cart', { product_id: productId })
+            .then(response => {
+                document.getElementById('dismiss-toast-success').classList.remove('hidden');
+
+                setTimeout(() => {
+                    document.getElementById('dismiss-toast-success').classList.add('hidden');
+                }, 3000);
+            })
+            .catch(error => {
+                document.getElementById('dismiss-toast-error').classList.remove('hidden');
+                
+                setTimeout(() => {
+                    document.getElementById('dismiss-toast-error').classList.add('hidden');
+                }, 3000);
+            });
+    }
+</script>
+
 @endsection

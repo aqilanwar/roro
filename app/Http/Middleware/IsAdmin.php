@@ -18,8 +18,8 @@ class IsAdmin
         if(Auth::user() && Auth::user()->role === 'ADMIN'){
             return $next($request);
         }
-
-        abort(403, 'You are not allowed to access this page.');
+        return redirect ('admin/login');
+        // abort(403, 'You are not allowed to access this page.');
     }
 
     
