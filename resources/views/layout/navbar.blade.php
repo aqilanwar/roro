@@ -17,12 +17,12 @@
       </div>
       <div id="navbar-collapse-with-animation" class="hs-collapse hidden overflow-hidden transition-all duration-300 basis-full grow sm:block">
         <div class="flex flex-col gap-y-4 gap-x-0 mt-5 sm:flex-row sm:items-center sm:justify-end sm:gap-y-0 sm:gap-x-7 sm:mt-0 sm:ps-7">
-          <a class="font-semibold text-green-600 sm:py-6 dark:text-green-500" href="{{ route('home') }}" aria-current="page">Home</a>
-          <a class="font-semibold text-gray-500 hover:text-gray-400 sm:py-6 dark:text-gray-400 dark:hover:text-gray-500" href="{{ route('product') }}">Product</a>
-
+          <a class="font-semibold {{ request()->routeIs('home') ? 'text-green-600' : 'text-gray-500' }} sm:py-6 dark:text-green-500" href="{{ route('home') }}" aria-current="page">Home</a>
+          <a class="font-semibold {{ request()->routeIs('product') ? 'text-green-600' : 'text-gray-500' }} hover:text-gray-400 sm:py-6 dark:text-gray-400 dark:hover:text-gray-500" href="{{ route('product') }}">Product</a>
+          
           @if(Auth::user())
           <div class="hs-dropdown [--strategy:static] sm:[--strategy:fixed] [--adaptive:none] sm:[--trigger:hover] sm:py-4 font-semibold">
-            <button type="button" class="flex items-center w-full text-gray-500 hover:text-gray-400 font-medium dark:text-gray-400 dark:hover:text-gray-500 font-semibold">
+            <button type="button" class="flex items-center w-full text-gray-500 hover:text-gray-400 font-medium dark:text-gray-400 dark:hover:text-gray-500 ">
               Hi, {{ Auth::user()->name }}
               <svg class="ms-2 w-2.5 h-2.5 text-gray-600 font-semibold" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M2 5L8.16086 10.6869C8.35239 10.8637 8.64761 10.8637 8.83914 10.6869L15 5" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>

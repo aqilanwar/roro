@@ -90,4 +90,15 @@ class PaymentController extends Controller
             'total_price' => $total_price,
         ];
     }
+
+    public function stripeSuccess(){
+
+        return view ('pages.payment-success');
+
+    }
+
+    public function stripeFailed(){
+
+        return view ('pages.payment-failed');
+    }
 }
