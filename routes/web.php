@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Middleware\IsCustomer;
 use App\Models\Bin;
 use Illuminate\Support\Facades\Auth;
-use App\Http\Controllers\CartController;
+use App\Http\Controllers\{CartController, PaymentController};
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -68,3 +68,6 @@ Route::post('/add-to-cart' , [CartController::class, 'addToCart']);
 Route::get('/get-cart' , [CartController::class, 'getCart']);
 Route::get('/cart' , [CartController::class, 'viewCart'])->name('view.cart');
 Route::get('/remove-from-cart' , [CartController::class, 'deleteFromCart'])->name('deleteFromCart');
+Route::get('/payment-gateway' , [PaymentController::class, 'stripeCheckout'])->name('stripeCheckout');
+Route::get('/success' , [PaymentController::class, 'stripeSuccess'])->name('stripeSuccess');
+Route::get('/failed' , [PaymentController::class, 'stripeFailed'])->name('stripeFailed');
