@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Filament\Resources;
+namespace App\Filament\Employee\Resources;
 
-use App\Filament\Resources\BookingResource\Pages;
-use App\Filament\Resources\BookingResource\RelationManagers;
-use App\Filament\Resources\BookingResource\RelationManagers\BinBookingRelationManager;
+use App\Filament\Employee\Resources\BookingResource\Pages;
+use App\Filament\Employee\Resources\BookingResource\RelationManagers;
+use App\Filament\Employee\Resources\BookingResource\RelationManagers\BookingBinRelationManager;
 use App\Models\Booking;
 use Filament\Forms\Components\Grid;
 
@@ -14,6 +14,7 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class BookingResource extends Resource
@@ -23,10 +24,13 @@ class BookingResource extends Resource
     protected static ?string $modelLabel = 'Customer Booking';
 
     protected static ?string $navigationIcon = 'heroicon-o-bookmark';
+
     public static function canCreate(): bool
     {
-        return false;
+       return false;
     }
+
+
     public static function form(Form $form): Form
     {
         return $form
@@ -87,7 +91,6 @@ class BookingResource extends Resource
                     ->description(fn (Booking $record): string => 'Customer Name: '. $record->user->name)
                     ->searchable(),
             
-                Tables\Columns\TextColumn::make('phone_number'),
                 Tables\Columns\TextColumn::make('payment_status')
 
                 ->badge()
@@ -131,16 +134,16 @@ class BookingResource extends Resource
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
+                // Tables\Actions\BulkActionGroup::make([
+                //     Tables\Actions\DeleteBulkAction::make(),
+                // ]),
             ]);
     }
 
     public static function getRelations(): array
     {
         return [
-            BinBookingRelationManager::class
+            BookingBinRelationManager::class
         ];
     }
 
@@ -148,7 +151,7 @@ class BookingResource extends Resource
     {
         return [
             'index' => Pages\ListBookings::route('/'),
-            'create' => Pages\CreateBooking::route('/create'),
+            // 'create' => Pages\CreateBooking::route('/create'),
             'view' => Pages\ViewBooking::route('/{record}'),
             'edit' => Pages\EditBooking::route('/{record}/edit'),
         ];

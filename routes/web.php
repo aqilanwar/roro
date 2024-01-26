@@ -4,7 +4,7 @@ use App\Http\Middleware\Authenticate;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use App\Http\Middleware\IsCustomer;
-use App\Models\Bin;
+use App\Models\{Bin, Booking};
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\{CartController, PaymentController};
 /*
@@ -37,7 +37,33 @@ Route::get('/product', function (Request $request) {
     
     if($request->id){
         $id = $request->id;
-        $data = Bin::find($id);
+
+        $bin = Bin::find($id);
+
+        $totalBooked = Booking::where('status', 'In Progress')
+        ->join('booking_bins', function ($join) use ($id) {
+            $join->on('bookings.id', '=', 'booking_bins.booking_id')
+                ->where('booking_bins.bin_id', '=', $id);
+        })
+        ->sum('booking_bins.quantity');
+
+        // $totalBinQuantity = Booking::where('status', 'In Progress')
+        // ->join('booking_bins', 'bookings.id', '=', 'booking_bins.booking_id')
+        // ->sum('booking_bins.quantity');
+        // foreach ($totalBooked as $booking) {
+        //     dd($booking->booking_bin->quantity);
+        // }
+
+
+        // dd($totalBinQuantity);
+
+        $binAvailable = $bin->quantity - $totalBooked;
+
+        $data = $bin;
+
+        $data->bin_available = $binAvailable;
+
+
         return view ('pages.product' , compact('data'));
 
     }else{
@@ -66,8 +92,8 @@ Route::get('/logout', function() {
 
 Route::post('/add-to-cart' , [CartController::class, 'addToCart']);
 Route::get('/get-cart' , [CartController::class, 'getCart']);
-Route::get('/cart' , [CartController::class, 'viewCart'])->name('view.cart');
+Route::get('/cart' , [CartController::class, 'viewCart'])->name('view.cart')->middleware(IsCustomer::class, Authenticate::class);
 Route::get('/remove-from-cart' , [CartController::class, 'deleteFromCart'])->name('deleteFromCart');
-Route::get('/payment-gateway' , [PaymentController::class, 'stripeCheckout'])->name('stripeCheckout');
+Route::post('/payment-gateway' , [PaymentController::class, 'stripeCheckout'])->name('stripeCheckout');
 Route::get('/success' , [PaymentController::class, 'stripeSuccess'])->name('stripeSuccess');
 Route::get('/failed' , [PaymentController::class, 'stripeFailed'])->name('stripeFailed');

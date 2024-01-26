@@ -1,29 +1,33 @@
 <?php
 
-namespace App\Filament\Resources;
+namespace App\Filament\Customer\Resources;
 
-use App\Filament\Resources\BookingResource\Pages;
-use App\Filament\Resources\BookingResource\RelationManagers;
-use App\Filament\Resources\BookingResource\RelationManagers\BinBookingRelationManager;
-use App\Models\Booking;
+use App\Filament\Customer\Resources\BookingResource\RelationManagers\BookingBinRelationManager;
 use Filament\Forms\Components\Grid;
 
+use App\Filament\Customer\Resources\BookingResource\Pages;
+use App\Filament\Customer\Resources\BookingResource\RelationManagers;
+use App\Models\Booking;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class BookingResource extends Resource
 {
     protected static ?string $model = Booking::class;
-    protected static ?string $navigationLabel = 'Customer Booking';
-    protected static ?string $modelLabel = 'Customer Booking';
 
-    protected static ?string $navigationIcon = 'heroicon-o-bookmark';
+    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+
     public static function canCreate(): bool
+    {
+        return false;
+    }
+    public static function canEdit(Model $record): bool
     {
         return false;
     }
@@ -82,65 +86,65 @@ class BookingResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
-            ->columns([
-                Tables\Columns\TextColumn::make('delivery_address')
-                    ->description(fn (Booking $record): string => 'Customer Name: '. $record->user->name)
-                    ->searchable(),
-            
-                Tables\Columns\TextColumn::make('phone_number'),
-                Tables\Columns\TextColumn::make('payment_status')
+        ->columns([
+            Tables\Columns\TextColumn::make('delivery_address')
+                ->description(fn (Booking $record): string => 'Customer Name: '. $record->user->name)
+                ->searchable(),
+        
+            Tables\Columns\TextColumn::make('phone_number'),
+            Tables\Columns\TextColumn::make('payment_status')
 
-                ->badge()
-                    ->color(fn (string $state): string => match ($state) {
-                        'Paid' => 'success',
-                        'Cancelled' => 'danger',
-                        'Pending' => 'warning',
-                        'Rejected' => 'danger',
-                    })
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('status')
-                   ->badge()
-                    ->color(fn (string $state): string => match ($state) {
-                        'In Progress' => 'gray',
-                        'Returned' => 'success',
-                        'Cancelled' => 'danger',
-                        // 'rejected' => 'danger',
-                    })
-                    ->searchable(),
-                // Tables\Columns\TextColumn::make('user.name')
-                //     ->searchable(),
- 
-                Tables\Columns\TextColumn::make('booking_date')
-                ->date()
-                ->sortable(),
+            ->badge()
+                ->color(fn (string $state): string => match ($state) {
+                    'Paid' => 'success',
+                    'Cancelled' => 'danger',
+                    'Pending' => 'warning',
+                    'Rejected' => 'danger',
+                })
+                ->searchable(),
+            Tables\Columns\TextColumn::make('status')
+               ->badge()
+                ->color(fn (string $state): string => match ($state) {
+                    'In Progress' => 'gray',
+                    'Returned' => 'success',
+                    'Cancelled' => 'danger',
+                    // 'rejected' => 'danger',
+                })
+                ->searchable(),
+            // Tables\Columns\TextColumn::make('user.name')
+            //     ->searchable(),
 
-                // Tables\Columns\TextColumn::make('created_at')
-                //     ->dateTime()
-                //     ->sortable()
-                //     ->toggleable(isToggledHiddenByDefault: true),
-                // Tables\Columns\TextColumn::make('updated_at')
-                //     ->dateTime()
-                //     ->sortable()
-                //     ->toggleable(isToggledHiddenByDefault: true),
-            ])
-            ->filters([
-                //
-            ])
-            ->actions([
-                Tables\Actions\ViewAction::make(),
-                Tables\Actions\EditAction::make(),
-            ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
-            ]);
+            Tables\Columns\TextColumn::make('booking_date')
+            ->date()
+            ->sortable(),
+
+            // Tables\Columns\TextColumn::make('created_at')
+            //     ->dateTime()
+            //     ->sortable()
+            //     ->toggleable(isToggledHiddenByDefault: true),
+            // Tables\Columns\TextColumn::make('updated_at')
+            //     ->dateTime()
+            //     ->sortable()
+            //     ->toggleable(isToggledHiddenByDefault: true),
+        ])
+        ->filters([
+            //
+        ])
+        ->actions([
+            Tables\Actions\ViewAction::make(),
+            // Tables\Actions\EditAction::make(),
+        ])
+        ->bulkActions([
+            Tables\Actions\BulkActionGroup::make([
+                Tables\Actions\DeleteBulkAction::make(),
+            ]),
+        ]);
     }
 
     public static function getRelations(): array
     {
         return [
-            BinBookingRelationManager::class
+            BookingBinRelationManager::class
         ];
     }
 

@@ -70,10 +70,20 @@ class CartController extends Controller
 
         $bin = Bin::find($product_id);
 
-        $totalBooked = Booking::where('bin_id', $product_id)
-        ->where('status', 'In Progress')
-        ->where('payment_status' , 'Paid')
-        ->sum('quantity');
+        $totalBooked = Booking::where('status', 'In Progress')
+        ->join('booking_bins', function ($join) use ($product_id) {
+            $join->on('bookings.id', '=', 'booking_bins.booking_id')
+                ->where('booking_bins.bin_id', '=', $product_id);
+        })
+        ->sum('booking_bins.quantity');
+
+        // dd($totalBooked);
+    
+
+        // $totalBooked = Booking::where('bin_id', $product_id)
+        // ->where('status', 'In Progress')
+        // ->where('payment_status' , 'Paid')
+        // ->sum('quantity');
 
         $totalAvailable = $bin->quantity - $totalBooked;
 
@@ -119,11 +129,6 @@ class CartController extends Controller
             'message' => 'Item added to the cart successfully.',
         ]);
             
-
-
-
-
-
     }
 
     public function getCart(){

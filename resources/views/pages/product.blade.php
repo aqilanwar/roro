@@ -47,13 +47,25 @@
             <div class="mt-10 px-4 sm:px-0 sm:mt-16 lg:mt-0">
                 <h1 class="text-2xl font-extrabold tracking-tight text-gray-900 flex items-center ">
                     {{ $data->bin_name }}
+                    @if($data->bin_available <= 0)
+                    <span class="py-1 mx-4 px-2 inline-flex items-center gap-x-1 text-xs font-medium bg-red-100 text-red-800 rounded-full dark:bg-teal-500/10 dark:text-teal-500 drop-shadow-md ">
+                        <svg class="flex-shrink-0 w-3 h-3" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                              </svg>                              
+                        </svg>
+                        Fully booked
+                    </span>
+                    @else
                     <span class="py-1 mx-4 px-2 inline-flex items-center gap-x-1 text-xs font-medium bg-teal-100 text-teal-800 rounded-full dark:bg-teal-500/10 dark:text-teal-500 drop-shadow-md ">
                         <svg class="flex-shrink-0 w-3 h-3" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/>
                             <path d="m9 12 2 2 4-4"/>
                         </svg>
-                        Available
+                        Quantity Available : {{ $data->bin_available }}
+
                     </span>
+                    @endif
                 </h1>
                 
             
@@ -76,6 +88,7 @@
             <div class="border-t mt-12 divide-y divide-gray-200"></div>
             
             <div x-data="{ productId: {{ $data->id }}}">
+                @if($data->bin_available > 0)
 
                 <button @click="addToCart(productId)" type="button" class="py-3 w-full text-center mt-4 px-4 inline-flex items-center justify-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
                     Rent now
@@ -89,6 +102,9 @@
                         <path d="m15 11-1 9"/>
                     </svg>
                 </button>
+
+                @endif
+
                 <!-- Toast -->
                 <div id="dismiss-toast-error" class="hidden absolute mt-5 w-full hs-removing:translate-x-5 hs-removing:opacity-0 transition duration-300 max-w-xs bg-red-100 border border-danger-200 rounded-xl shadow-lg" role="alert">
                     <div class="flex p-4">

@@ -3,12 +3,28 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Bin;
+use App\Models\{Booking,Bin,BookingBin};
+use Illuminate\Support\Facades\Auth;
 
 class PaymentController extends Controller
 {
-    public function stripeCheckout(){
+    public function stripeCheckout(Request $request){
         $stripe_key = env('STRIPE_ENV_KEY');
+
+
+        $customer_detail = [
+            'address1' => $request->address1,
+            'address2' => $request->address2,
+            'postcode' => $request->postcode,
+            'state' => $request->state,
+            'booking_date' => $request->booking_date,
+            'phone_number' => $request->phone_number
+        ];
+
+
+
+        // $customer_detail = session('customer_detail', []);
+
 
         $booking_details = $this->calculateCart();
 
@@ -42,11 +58,15 @@ class PaymentController extends Controller
                 'success_url' => route('stripeSuccess') . "?session_id={CHECKOUT_SESSION_ID}",
                 'cancel_url' => route('stripeFailed'),
                 'metadata' => [
-                    'booking_id' => '1',
-                    'deposit_price' => '100',
-                    'total_price' => '5000'
+                    'address1' => $customer_detail['address1'] ,
+                    'address2' => $customer_detail['address2'] ,
+                    'postcode' => $customer_detail['postcode'] ,
+                    'state' => $customer_detail['state'] ,
+                    'booking_date' => $customer_detail['booking_date'] ,
+                    'phone_number' => $customer_detail['phone_number'] ,
+
                 ],
-                'customer_email' => 'razak@gmail.com'
+                'customer_email' => Auth::user()->email,
                 
 
               ]);
@@ -91,8 +111,42 @@ class PaymentController extends Controller
         ];
     }
 
-    public function stripeSuccess(){
+    public function stripeSuccess(Request $request){
+        // Retrieve the Checkout Session ID from the query parameters
+        $sessionId = $request->query('session_id');
 
+        // Retrieve the Checkout Session from Stripe using the session ID
+        $stripe = new \Stripe\StripeClient(env('STRIPE_ENV_KEY'));
+        $checkoutSession = $stripe->checkout->sessions->retrieve($sessionId);
+
+        // Retrieve the booking_id from the metadata of the Checkout Session
+        $address1 = $checkoutSession->metadata->address1;
+        $address2 = $checkoutSession->metadata->address2;
+        $state = $checkoutSession->metadata->state;
+        $postcode = $checkoutSession->metadata->postcode;
+        $phone_number = $checkoutSession->metadata->phone_number;
+        $booking_date = $checkoutSession->metadata->booking_date;
+
+        $user_id = Auth::user()->id;
+        $bookingId = Booking::insertGetId([
+            'delivery_address' => $address1 . ',' . $address2 . ',' . $postcode . ',' .$state,
+            'booking_date' => $booking_date,
+            'phone_number' => $phone_number,
+            'payment_status' => 'Paid',
+            'status' => 'In Progress',
+            'user_id' => $user_id,
+        ]);
+
+        $cart = session('cart', []);
+
+        foreach ($cart as $item) {
+            BookingBin::create([
+                'bin_id' => $item['bin_id'],
+                'quantity' => $item['quantity'],
+                'booking_id' => $bookingId
+            ]);
+        }
+        
         return view ('pages.payment-success');
 
     }

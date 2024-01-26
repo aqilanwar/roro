@@ -19,11 +19,7 @@ class IsCustomer
             return $next($request);
         }
 
-        return redirect()->route('login');
-    }
+        return redirect()->route('login')->with('intended_url', route('view.cart'));
 
-    protected function redirectTo($request)
-    {
-        return '/login';
     }
 }

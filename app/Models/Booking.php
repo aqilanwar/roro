@@ -24,7 +24,8 @@ class Booking extends Model
     public function user(){
         return $this->belongsTo(User::class);
     }
-    public function bin(){
-        return $this->belongsTo(Bin::class);
+    public function booking_bin(){
+        return $this->hasMany(BookingBin::class, 'booking_id');
     }
+    
 }
