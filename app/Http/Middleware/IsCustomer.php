@@ -19,6 +19,14 @@ class IsCustomer
             return $next($request);
         }
 
+        if(Auth::user() && Auth::user()->role === 'ADMIN'){
+            return redirect('/dashboard');
+        }
+
+        if(Auth::user() && Auth::user()->role === 'EMPLOYEE'){
+            return redirect('/dashboard');
+        }
+        
         return redirect()->route('login')->with('intended_url', route('view.cart'));
 
     }

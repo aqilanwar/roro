@@ -29,7 +29,10 @@ class BookingResource extends Resource
     {
        return false;
     }
-
+    public static function canDelete(Model $record): bool
+    {
+        return false;
+    }
 
     public static function form(Form $form): Form
     {
@@ -43,6 +46,8 @@ class BookingResource extends Resource
                         ->schema([
                             Forms\Components\Select::make('payment_status')
                             ->required()
+                            ->disabledOn('edit') 
+
                             ->options([
                                 'Paid' => 'Paid',
                                 'Pending' => 'Pending',
@@ -51,6 +56,7 @@ class BookingResource extends Resource
                             ]),
     
                         Forms\Components\Select::make('status')
+                        
                             ->required()
                             ->options([
                                 'In Progress' => 'In Progress',

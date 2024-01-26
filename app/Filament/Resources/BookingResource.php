@@ -39,6 +39,7 @@ class BookingResource extends Resource
                         ->schema([
                             Forms\Components\Select::make('payment_status')
                             ->required()
+                            ->disabledOn('edit') 
                             ->options([
                                 'Paid' => 'Paid',
                                 'Pending' => 'Pending',

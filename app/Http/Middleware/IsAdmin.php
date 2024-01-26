@@ -19,6 +19,15 @@ class IsAdmin
             return $next($request);
         }
         // return redirect ('admin/login');
+
+        if(Auth::user() && Auth::user()->role === 'EMPLOYEE'){
+            return redirect('/dashboard');
+        }
+
+        if(Auth::user() && Auth::user()->role === 'CUSTOMER'){
+            return redirect('/dashboard');
+        }
+
         abort(403, 'You are not allowed to access this page.');
     }
 

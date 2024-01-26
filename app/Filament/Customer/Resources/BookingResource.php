@@ -16,13 +16,17 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Auth;
 
 class BookingResource extends Resource
 {
     protected static ?string $model = Booking::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
-
+    // protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()->whereBelongsTo(auth()->user());
+    }
     public static function canCreate(): bool
     {
         return false;
@@ -31,12 +35,17 @@ class BookingResource extends Resource
     {
         return false;
     }
+
+    public static function canDelete(Model $record): bool
+    {
+        return false;
+    }
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                Forms\Components\Section::make('Manage customer booking')
-                ->description('You can update the booking status.')
+                Forms\Components\Section::make('View your booking detail')
+                ->description('You can view the booking detail.')
                 ->schema([
 
                     Grid::make(2)
@@ -75,11 +84,6 @@ class BookingResource extends Resource
                     
                 ])
 
-                    
-                // Forms\Components\TextInput::make('user')
-                //     ->required()
-                //     ->maxLength(255),
- 
             ]);
     }
 
@@ -135,9 +139,9 @@ class BookingResource extends Resource
             // Tables\Actions\EditAction::make(),
         ])
         ->bulkActions([
-            Tables\Actions\BulkActionGroup::make([
-                Tables\Actions\DeleteBulkAction::make(),
-            ]),
+            // Tables\Actions\BulkActionGroup::make([
+            //     Tables\Actions\DeleteBulkAction::make(),
+            // ]),
         ]);
     }
 

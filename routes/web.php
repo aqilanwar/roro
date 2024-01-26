@@ -87,7 +87,7 @@ Route::get('/dashboard' , function (){
 
 Route::get('/logout', function() {
     Auth::logout();
-    return redirect('/login');
+    return redirect('/');
 })->name('logout');
 
 Route::post('/add-to-cart' , [CartController::class, 'addToCart']);

@@ -21,14 +21,7 @@ class PaymentController extends Controller
             'phone_number' => $request->phone_number
         ];
 
-
-
-        // $customer_detail = session('customer_detail', []);
-
-
         $booking_details = $this->calculateCart();
-
-        // dd($booking_details);
 
         try{
             $stripe = new \Stripe\StripeClient($stripe_key);
@@ -146,7 +139,9 @@ class PaymentController extends Controller
                 'booking_id' => $bookingId
             ]);
         }
-        
+
+        session()->forget('cart');
+
         return view ('pages.payment-success');
 
     }

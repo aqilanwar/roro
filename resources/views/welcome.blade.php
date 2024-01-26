@@ -8,7 +8,8 @@
             <div>
                 <h1
                     class="block text-3xl font-bold text-gray-800 sm:text-4xl lg:text-6xl lg:leading-tight dark:text-white">
-                    Get your place cleaned with <br> <span class="text-green-600">KS Recycle Resource</span></h1>
+                    Welcome to our user friendly KSR Ro-ro Bin Management System
+                    <br> <span class="text-green-600">KS Recycle Resource</span></h1>
                 <p class="mt-3 text-lg text-gray-800 dark:text-gray-400">Hand-picked professionals and expertly crafted
                     components, designed for any kind of entrepreneur.</p>
 
