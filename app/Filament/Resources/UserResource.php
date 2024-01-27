@@ -38,6 +38,9 @@ class UserResource extends Resource
                         ->unique(table: User::class, ignoreRecord: true)
                         ->required(),
 
+                    Forms\Components\TextInput::make('phone_number')
+                        ->unique(table: User::class, ignoreRecord: true)
+                        ->required(),
 
                     Forms\Components\Select::make('role')
                         ->required()
@@ -64,6 +67,9 @@ class UserResource extends Resource
                 ->sortable()
                 ->searchable(),
                 TextColumn::make('email')
+                ->sortable()
+                ->searchable(),
+                TextColumn::make('phone_number')
                 ->sortable()
                 ->searchable(),
                 TextColumn::make('role')
