@@ -19,6 +19,7 @@ use Illuminate\Session\Middleware\AuthenticateSession;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use App\Filament\Employee\Pages\Auth\EditProfile;
+use Filament\Navigation\NavigationItem;
 class EmployeePanelProvider extends PanelProvider
 {
     public function panel(Panel $panel): Panel
@@ -30,6 +31,13 @@ class EmployeePanelProvider extends PanelProvider
             ->profile(EditProfile::class)
             ->colors([
                 'primary' => Color::Amber,
+            ])
+            ->navigationItems([
+                NavigationItem::make('Landing Page')
+                ->url('/')
+                ->icon('heroicon-s-home')
+                ->group('Navigate')
+                ->sort('1')
             ])
             ->discoverResources(in: app_path('Filament/Employee/Resources'), for: 'App\\Filament\\Employee\\Resources')
             ->discoverPages(in: app_path('Filament/Employee/Pages'), for: 'App\\Filament\\Employee\\Pages')

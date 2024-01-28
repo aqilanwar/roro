@@ -19,6 +19,7 @@ use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\AuthenticateSession;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
+use Filament\Navigation\NavigationItem;
 class AdminPanelProvider extends PanelProvider
 {
     protected static ?string $navigationGroup = 'Manage User';
@@ -39,6 +40,13 @@ class AdminPanelProvider extends PanelProvider
                 'primary' => Color::Indigo,
                 'success' => Color::Emerald,
                 'warning' => Color::Orange,
+            ])
+            ->navigationItems([
+                NavigationItem::make('Landing Page')
+                ->url('/')
+                ->icon('heroicon-s-home')
+                ->group('Navigate')
+                ->sort('1')
             ])
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')

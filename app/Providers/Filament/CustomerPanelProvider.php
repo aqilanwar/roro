@@ -20,6 +20,7 @@ use Illuminate\Session\Middleware\AuthenticateSession;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use App\Filament\Customer\Pages\Auth\Register;
+use Filament\Navigation\NavigationItem;
 class CustomerPanelProvider extends PanelProvider
 {
     public function panel(Panel $panel): Panel
@@ -32,6 +33,13 @@ class CustomerPanelProvider extends PanelProvider
             ->profile(EditProfile::class)
             ->colors([
                 'primary' => Color::Amber,
+            ])
+            ->navigationItems([
+                NavigationItem::make('Landing Page')
+                ->url('/')
+                ->icon('heroicon-s-home')
+                ->group('Navigate')
+                ->sort('1')
             ])
             ->discoverResources(in: app_path('Filament/Customer/Resources'), for: 'App\\Filament\\Customer\\Resources')
             ->discoverPages(in: app_path('Filament/Customer/Pages'), for: 'App\\Filament\\Customer\\Pages')
