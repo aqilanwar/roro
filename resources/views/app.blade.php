@@ -14,6 +14,15 @@
         @livewireStyles
     </head>
     <body class="font-poppins">
+        <div class="fixed bottom-4 right-4 z-10">
+            <a href="https://wa.me/60105443576" target="_blank" rel="noopener noreferrer"
+               class="bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-full flex items-center">
+               <x-bi-whatsapp class="mr-2" />
+
+
+              Chat on WhatsApp
+            </a>
+          </div>
     
         @include('layout.navbar')
         @include('layout.cart')
